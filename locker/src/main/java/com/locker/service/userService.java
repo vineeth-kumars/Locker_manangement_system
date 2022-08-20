@@ -1,0 +1,24 @@
+package com.locker.service;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.locker.entity.Users;
+import com.locker.repository.userRepository;
+
+@Service
+public class userService {
+	
+	
+	@Autowired
+	userRepository userRepository;
+	
+	public Users createUser(Users user) {
+		Users u = new Users();
+		u.setUserName(user.getUserName());
+	 return userRepository.save(u);
+	}
+	
+
+
+}

@@ -1,0 +1,5 @@
+package com.locker.repository;
+
+public class userRepository {
+
+}

@@ -1,0 +1,19 @@
+package com.locker.service;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.locker.entity.Lockers;
+
+@Service
+public class LockerService {
+	
+	
+	@Autowired
+	com.locker.repository.lockerRepository lockerRepository;
+	
+	public Lockers createLocker() { 
+		Lo
+	}
+
+}

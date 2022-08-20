@@ -1,0 +1,7 @@
+package com.locker.repository;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface userRepository extends JpaRepository<id, integer> {
+
+}

@@ -1,0 +1,75 @@
+package com.locker.service;
+
+import java.util.List;
+import java.util.stream.Collectors;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.locker.entity.Lockers;
+import com.locker.entity.Users;
+import com.locker.model.UserLocker;
+import com.locker.repository.userRepository;
+
+@Service
+public class LockerService {
+
+	
+	@Autowired
+	userRepository userRepository;
+	
+	@Autowired
+	com.locker.repository.lockerRepository lockerRepository;
+
+	public Lockers createLocker(Lockers locker) {
+		Lockers l = new Lockers();
+		l.setAvailabilityStatus(true);
+		return lockerRepository.save(l);
+	}
+
+	public List<Lockers> allAvailableLockers(){
+	List<Lockers> allLockers =	lockerRepository.findAll();
+	List<Lockers> avaliableLockers = allLockers.stream().filter(locker -> locker.isAvailabilityStatus()==true).collect(Collectors.toList());
+	return avaliableLockers;
+	}
+	
+	public Lockers updateLocker(UserLocker userlocker ) {
+	Lockers	l = lockerRepository.findById(userlocker.getLockerId());
+	
+	if(l.isAvailabilityStatus() == true)
+	{
+		l.setAvailabilityStatus(false);
+		l.setPassCode(userlocker.getPassCode());
+		l.setUserId(userlocker.getUserId());
+	Lockers l2 =	 lockerRepository.save(l);
+		 
+		 Users u = userRepository.findById(userlocker.getUserId());
+		 u.setLockerId(userlocker.getLockerId());
+		 u.setPassCode(userlocker.getPassCode());
+		userRepository.save(u);
+		return l2;
+		
+		
+	}
+	return null;
+		
+		
+	}
+	
+	public Lockers checkOutLocker(UserLocker userlocker) {
+		Lockers l = lockerRepository.findById(userlocker.getLockerId());
+		if(l.getPassCode()== userlocker.getPassCode()) {
+			l.setAvailabilityStatus(true);
+			l.setUserId(0);
+			l.setPassCode(0);
+			Users u = userRepository.findById(userlocker.getUserId());
+			u.setLockerId(0);
+			u.setPassCode(0);
+			userRepository.save(u);
+			return lockerRepository.save(l);
+		}
+		return null;
+				
+	}
+
+}
